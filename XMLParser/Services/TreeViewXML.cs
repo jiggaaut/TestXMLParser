@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace XMLParser.Services
 {
-    public class TreeViewXML : System.Windows.Controls.TreeView
+    public class TreeViewXML : TreeView
     {
         public void GetXMLFromURL(string url)
         {
@@ -27,7 +23,7 @@ namespace XMLParser.Services
             var Node = new TreeViewItem();
             if (xml.DocumentElement != null)
             {
-                Node.Header = xml.DocumentElement.Name;
+                Node.Header = xml.DocumentElement.OuterXml.Replace(xml.DocumentElement.InnerXml, "");
             }
             else
             {
@@ -38,31 +34,36 @@ namespace XMLParser.Services
         }
         public void BuildNodes(TreeViewItem treeNode, XmlElement xmlElement)
         {
-            /*int i = 0;
-            while (xmlNode.HasChildNodes)
-            {
-                var Node = xmlNode.ChildNodes[i];
-                tree.AddChild(new TreeViewItem(){ Header = Node.Name });
-                tree = tree.Ch;
-                BuildNodes(Tree, Node);
-            }*/
             foreach (XmlNode child in xmlElement.ChildNodes)
             {
                 if (child.NodeType == XmlNodeType.Element)
                 {
                     var childElement = child as XmlElement;
-                    TreeViewItem ChildTree = new TreeViewItem { Header = child.Name };
+                    TreeViewItem ChildTree = new TreeViewItem();
+                    if (child.HasChildNodes)
+                    {
+                        ChildTree.Header = child.OuterXml.Replace(child.InnerXml, "");
+                        
+                    }
+                    else
+                    {
+                        ChildTree.Header = child.OuterXml;
+                    }
+                    if (ChildTree.Header.ToString().Contains("color"))
+                    {
+                        var str = ChildTree.Header.ToString().Split('=')[1];
+                        str = str.Split('/')[0].Trim(' ', '\"');
+                        ChildTree.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(str));
+                    }
                     treeNode.Items.Add(ChildTree);
                     BuildNodes(ChildTree, childElement);
                 }
                 if (child.NodeType == XmlNodeType.Text)
                 {
                     var childText = child as XmlText;
-                    treeNode.Items.Add(new TreeViewItem { Header = child.Value });
+                    treeNode.Items.Add(new TreeViewItem { Header = childText.Value });
                 }
-
             }
-
         }
     }
 }

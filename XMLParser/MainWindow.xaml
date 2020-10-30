@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="URLBox" HorizontalAlignment="Left" Height="46" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234"/>
+        <TextBox x:Name="URLBox" HorizontalAlignment="Left" Height="46" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Text="https://raw.githubusercontent.com/kizeevov/elcomplusfiles/main/tree.xml"/>
         <Button Content="Button" HorizontalAlignment="Left" Height="46" Margin="262,10,0,0" VerticalAlignment="Top" Width="113" Click="Button_Click"/>
 
         <Services:TreeViewXML x:Name="treeViewXML" HorizontalAlignment="Left" Height="303" Margin="10,77,0,0" VerticalAlignment="Top" Width="365"/>
